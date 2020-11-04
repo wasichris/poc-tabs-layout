@@ -146,7 +146,7 @@ class Demo extends React.Component {
 
       <Divider orientation="left"></Divider>
 
-      <Table bordered components={this.components} columns={columns} dataSource={this.data} />;
+      <Table bordered components={this.components} columns={columns} dataSource={this.data} />
     </>
 
   }
