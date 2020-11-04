@@ -1,32 +1,60 @@
-import { Card, Col, Row, Divider, Button } from 'antd';
+import { Card, Col, Row, Divider, Button, Typography } from 'antd';
 import Report from '../Report/index.js'
 import Spin from '../Spin/index.js'
 import Register from '../Register/index.js'
+import Chart from '../Chart/index.js'
 
+const { Title, Paragraph, Link } = Typography;
 
-const cards = ({addTab}) => {
+const cards = ({ addTab }) => {
 
   return <div className="site-card-wrapper">
 
-    <h2> Welcome to the platform</h2>
+    <Title level={2}>Welcome to the platform</Title>
 
     <Row gutter={16}>
       <Col span={8}>
         <Card title="Application 01" className='ant-card-gb' bordered={true}>
 
-          <div><Button type="link" onClick={() => addTab('Report', () => <Report />)}>Report</Button></div>
-          <div><Button type="link" onClick={() => addTab('Register', () => <Register />)}>Register</Button></div>
+          <Paragraph>
+            <ul>
+              <li>
+                <Link onClick={() => addTab('Report', () => <Report />)}>Report</Link>
+              </li>
+              <li>
+                <Link onClick={() => addTab('Register', () => <Register />)}>Register</Link>
+              </li>
+            </ul>
+          </Paragraph>
 
         </Card>
       </Col>
       <Col span={8}>
         <Card title="Application 02" className='ant-card-gb' bordered={true}>
-          <div><Button type="link" onClick={() => addTab('Spin', () => <Spin />)}>Spin</Button></div>
+          <Paragraph>
+
+            <ul>
+              <li>
+                <Link onClick={() => addTab('Spin', () => <Spin />)}>Spin</Link>
+              </li>
+              <li>
+                <Link onClick={() => addTab('Chart', () => <Chart />)}>Chart</Link>
+              </li>
+            </ul>
+          </Paragraph>
+
         </Card>
       </Col>
       <Col span={8}>
         <Card title="Application 03" className='ant-card-gb' bordered={true}>
-          Card content
+          <Paragraph>
+            <ul>
+              <li>
+                Function01
+              </li>
+            </ul>
+          </Paragraph>
+
         </Card>
       </Col>
     </Row>
@@ -35,17 +63,35 @@ const cards = ({addTab}) => {
     <Row gutter={16}>
       <Col span={8}>
         <Card title="Application 04" className='ant-card-gb' bordered={true}>
-          Card content
+          <Paragraph>
+            <ul>
+              <li>
+                Function01
+              </li>
+            </ul>
+          </Paragraph>
         </Card>
       </Col>
       <Col span={8}>
         <Card title="Application 05" className='ant-card-gb' bordered={true}>
-          Card content
+          <Paragraph>
+            <ul>
+              <li>
+                Function01
+              </li>
+            </ul>
+          </Paragraph>
         </Card>
       </Col>
       <Col span={8}>
         <Card title="Application 06" className='ant-card-gb' bordered={true}>
-          Card content
+          <Paragraph>
+            <ul>
+              <li>
+                Function01
+              </li>
+            </ul>
+          </Paragraph>
         </Card>
       </Col>
 

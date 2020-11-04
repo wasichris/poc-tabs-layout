@@ -9,12 +9,12 @@ import {
   MenuUnfoldOutlined,
   MenuFoldOutlined,
   UserOutlined,
-  VideoCameraOutlined,
+  AreaChartOutlined,
   StarOutlined,
 } from '@ant-design/icons';
 import Report from './components/Report/index.js'
 import Welcome from './components/Welcome/index.js'
-import Spin from './components/Spin/index.js'
+import Chart from './components/Chart/index.js'
 import Register from './components/Register/index.js'
 import Favorite from './components/Favorite/index.js'
 
@@ -122,8 +122,8 @@ function App() {
             <Menu.Item key="2" icon={<TableOutlined />} onClick={() => addTab('Report', () => <Report />)}>
               Report
             </Menu.Item>
-            <Menu.Item key="3" icon={<VideoCameraOutlined />} onClick={() => addTab('Spin', () => <Spin />)}>
-              Spin
+            <Menu.Item key="3" icon={<AreaChartOutlined />} onClick={() => addTab('Chart', () => <Chart />)}>
+              Chart
             </Menu.Item>
             <Menu.Item key="4" icon={<UserOutlined />} onClick={() => addTab('Register', () => <Register />)}>
               Register
