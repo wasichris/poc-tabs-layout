@@ -1,4 +1,4 @@
-.App {
+/* .App {
   text-align: center;
 }
 
@@ -35,4 +35,60 @@
   to {
     transform: rotate(360deg);
   }
+}
+ */
+
+ .App {
+  height: 100vh;;
+}
+
+
+ .trigger {
+  font-size: 18px;
+  line-height: 64px;
+  padding: 0 24px;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+ .trigger:hover {
+  color: #1890ff;
+}
+
+ .logo {
+  height: 32px;
+  background: rgba(255, 255, 255, 0.3);
+  margin: 16px;
+}
+
+.site-layout .site-layout-background {
+  background: #fff;
+}
+
+.app-layout {
+  min-height: 100vh;
+}
+
+
+/*=============== table */
+
+.react-resizable {
+  position: relative;
+  background-clip: padding-box;
+}
+
+.react-resizable-handle {
+  position: absolute;
+  right: -5px;
+  bottom: 0;
+  z-index: 1;
+  width: 10px;
+  height: 100%;
+  cursor: col-resize;
+}
+
+
+/**/
+.ant-card.ant-card-gb {
+  background: #f5f9ff;
 }
