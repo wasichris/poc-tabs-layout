@@ -8,8 +8,8 @@
 # testing
 /coverage
 
-# production
-/build
+# production (為了要直接將 build 出的檔案佈署到 heroku 上，所以把這個資料夾列入版控)
+# /build
 
 # misc
 .DS_Store
