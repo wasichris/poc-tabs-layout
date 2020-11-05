@@ -11,6 +11,7 @@ import {
   UserOutlined,
   AreaChartOutlined,
   StarOutlined,
+  EyeOutlined,
 } from '@ant-design/icons';
 import Report from './components/Report/index.js'
 import Welcome from './components/Welcome/index.js'
@@ -71,8 +72,8 @@ function App() {
   // };
 
   React.useEffect(() => {
-    // addTab('Welcome', (addTab) => <Welcome addTab={addTab} />)
-    addTab('Factory', (addTab) => <Factory addTab={addTab} />)
+    addTab('Welcome', (addTab) => <Welcome addTab={addTab} />)
+    // addTab('Factory', (addTab) => <Factory addTab={addTab} />)
   }, [])
 
 
@@ -121,6 +122,7 @@ function App() {
             <Menu.Item key="1" icon={<HomeOutlined />} onClick={() => addTab('Welcome', (addTab) => <Welcome addTab={addTab} />)}>
               Home
             </Menu.Item>
+            
             <Menu.Item key="2" icon={<TableOutlined />} onClick={() => addTab('Report', () => <Report />)}>
               Report
             </Menu.Item>
@@ -130,7 +132,10 @@ function App() {
             <Menu.Item key="4" icon={<UserOutlined />} onClick={() => addTab('Register', () => <Register />)}>
               Register
             </Menu.Item>
-            <Menu.Item key="5" icon={<StarOutlined />} onClick={() => addTab('Favorite', (addTab) => <Favorite addTab={addTab} />)}>
+            <Menu.Item key="5" icon={<EyeOutlined />} onClick={() => addTab('Factory', () => <Factory />)}>
+              Factory
+            </Menu.Item>
+            <Menu.Item key="6" icon={<StarOutlined />} onClick={() => addTab('Favorite', (addTab) => <Favorite addTab={addTab} />)}>
               Favorite
             </Menu.Item>
           </Menu>
