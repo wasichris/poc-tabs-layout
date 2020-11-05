@@ -17,6 +17,7 @@ import Welcome from './components/Welcome/index.js'
 import Chart from './components/Chart/index.js'
 import Register from './components/Register/index.js'
 import Favorite from './components/Favorite/index.js'
+import Factory from './components/Factory/index.js'
 
 const { TabPane } = Tabs;
 const { Header, Sider, Content } = Layout;
@@ -70,7 +71,8 @@ function App() {
   // };
 
   React.useEffect(() => {
-    addTab('Welcome', (addTab) => <Welcome addTab={addTab} />)
+    // addTab('Welcome', (addTab) => <Welcome addTab={addTab} />)
+    addTab('Factory', (addTab) => <Factory addTab={addTab} />)
   }, [])
 
 

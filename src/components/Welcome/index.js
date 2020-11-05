@@ -3,6 +3,7 @@ import Report from '../Report/index.js'
 import Spin from '../Spin/index.js'
 import Register from '../Register/index.js'
 import Chart from '../Chart/index.js'
+import Factory from '../Factory/index.js'
 
 const { Title, Paragraph, Link } = Typography;
 
@@ -39,6 +40,9 @@ const cards = ({ addTab }) => {
               </li>
               <li>
                 <Link onClick={() => addTab('Chart', () => <Chart />)}>Chart</Link>
+              </li>
+              <li>
+                <Link onClick={() => addTab('Factory', () => <Factory />)}>Factory</Link>
               </li>
             </ul>
           </Paragraph>

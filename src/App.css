@@ -92,3 +92,11 @@
 .ant-card.ant-card-gb {
   background: #f5f9ff;
 }
+
+#cy {
+  width: 100%;
+  height: 450px;
+  display: block;
+  background: #f5f9ff;
+  margin-top: 10px;
+}
