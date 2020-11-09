@@ -1,7 +1,6 @@
 import React from 'react';
-import { Button, DatePicker, Layout, Switch, Space } from 'antd';
+import { Button, DatePicker, Layout, Switch, Space, message } from 'antd';
 import { PlusCircleOutlined, SaveOutlined, UploadOutlined, MinusCircleOutlined } from '@ant-design/icons';
-
 import cytoscape from 'cytoscape';
 import edgehandles from 'cytoscape-edgehandles';
 
@@ -358,6 +357,7 @@ class Card extends React.Component {
     this.eh.hide()
     const cyjsonStr = JSON.stringify(this.cy.json())
     window.localStorage.setItem("elements", cyjsonStr);
+    message.success('This layout has been Saved.');
   }
 
   handleRestore = () => {
