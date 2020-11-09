@@ -339,7 +339,7 @@ class Card extends React.Component {
 
     return (
       <>
-        <Space>
+        <div className='factory_tool'>
           <Button type="primary" icon={<PlusCircleOutlined />} onClick={this.handleAddMachine01}> Add Machine 01 </Button>
           <Button type="primary" icon={<PlusCircleOutlined />} onClick={this.handleAddMachine02}> Add Machine 02 </Button>
           <Button type="primary" icon={<PlusCircleOutlined />} onClick={this.handleAddLayoutNode}> Add Layout Node </Button>
@@ -349,7 +349,7 @@ class Card extends React.Component {
           <Button type="primary" onClick={this.handleSwitchConnectMode}> Turn {this.state.isEnableEh ? 'OFF' : 'ON'} Connect Mode</Button>
           
           <Button onClick={this.handleLoadDemoFactory}> Load Demo Data </Button>
-        </Space>
+        </div>
 
         <div id='cy'>
 

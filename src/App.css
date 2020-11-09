@@ -100,3 +100,8 @@
   background: #f5f9ff;
   margin-top: 10px;
 }
+
+
+.factory_tool > * {
+  margin: 0 10px 10px 0;
+}
