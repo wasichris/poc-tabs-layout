@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, DatePicker, Layout, Switch , Space } from 'antd';
+import { Button, DatePicker, Layout, Switch, Space } from 'antd';
 import { PlusCircleOutlined, SaveOutlined, UploadOutlined, MinusCircleOutlined } from '@ant-design/icons';
 
 import cytoscape from 'cytoscape';
@@ -7,11 +7,11 @@ import edgehandles from 'cytoscape-edgehandles';
 
 
 
-
 class Card extends React.Component {
 
   cy = null
   eh = null
+  ur = null
 
   constructor(props) {
     super(props)
@@ -24,10 +24,12 @@ class Card extends React.Component {
 
   componentDidMount() {
 
-  
+
 
     try {
       cytoscape.use(edgehandles);
+      var undoRedo = require('cytoscape-undo-redo');
+      undoRedo(cytoscape);
     } catch (error) {
 
     }
@@ -175,7 +177,8 @@ class Card extends React.Component {
 
 
 
-
+    // ==================================
+    // edgehandles
 
 
     // the default values of each option are outlined below:
@@ -230,6 +233,10 @@ class Card extends React.Component {
       },
       complete: function (sourceNode, targetNode, addedEles) {
         // fired when edgehandles is done and elements are added
+
+        // for undo
+        // 猜測應該重複的物件不會重複加入，所以這邊只會列入 undo plugin 的記憶陣列中，不會再產生新的 eles 了
+        self.ur.do("add", addedEles)
       },
       stop: function (sourceNode) {
         // fired when edgehandles interaction is stopped (either complete with added edges or incomplete)
@@ -264,16 +271,53 @@ class Card extends React.Component {
       var node = evt.target;
       console.log('click ' + node.id());
       const nodeData = node.json()
-      self.setState({...this.state, selectedNodeId: nodeData.data.id})
+      self.setState({ ...this.state, selectedNodeId: nodeData.data.id })
     });
 
     // default not let connect mode on
     this.eh.hide()
     this.eh.disable();
+
+
+
+    // ==================================
+    // undoRedo
+
+    var options = {
+      isDebug: false, // Debug mode for console messages
+      actions: {},// actions to be added
+      undoableDrag: true, // Whether dragging nodes are undoable can be a function as well
+      stackSizeLimit: undefined, // Size limit of undo stack, note that the size of redo stack cannot exceed size of undo stack
+      ready: function () { // callback when undo-redo is ready
+        console.log(`%c copy plugin ready `, 'background-color: #3A88AE; color: white;font-size: 14px; font-weight: bold;',)
+      }
+    }
+
+    this.ur = this.cy.undoRedo(options); // Can also be set whenever wanted.
+    document.addEventListener("keydown", function (e) {
+      if (e.which === 46) {
+        var selecteds = self.cy.$(":selected");
+        if (selecteds.length > 0)
+          self.ur.do("remove", selecteds);
+      }
+      else if (e.ctrlKey && e.target.nodeName === 'BODY')
+        if (e.which === 90)
+          self.ur.undo();
+        else if (e.which === 89)
+          self.ur.redo();
+
+    });
+
   }
 
   handleAddMachine01 = () => {
-    this.cy.add({
+    // this.cy.add({
+    //   group: 'nodes',
+    //   data: { name: 'M', weight: 75, type: 'rectangle', width: 30, height: 50 },
+    //   position: { x: 50, y: 100 }
+    // })
+
+    this.ur.do("add", {
       group: 'nodes',
       data: { name: 'M', weight: 75, type: 'rectangle', width: 30, height: 50 },
       position: { x: 50, y: 100 }
@@ -282,7 +326,13 @@ class Card extends React.Component {
   }
 
   handleAddMachine02 = () => {
-    this.cy.add({
+    // this.cy.add({
+    //   group: 'nodes',
+    //   data: { name: 'P', weight: 75, type: 'rectangle', width: 80, height: 50 },
+    //   position: { x: 50, y: 100 }
+    // })
+
+    this.ur.do("add", {
       group: 'nodes',
       data: { name: 'P', weight: 75, type: 'rectangle', width: 80, height: 50 },
       position: { x: 50, y: 100 }
@@ -291,7 +341,13 @@ class Card extends React.Component {
   }
 
   handleAddLayoutNode = () => {
-    this.cy.add({
+    // this.cy.add({
+    //   group: 'nodes',
+    //   data: { name: 'N', weight: 100, type: 'circle', width: 20, height: 20 },
+    //   position: { x: 50, y: 50 }
+    // })
+
+    this.ur.do("add", {
       group: 'nodes',
       data: { name: 'N', weight: 100, type: 'circle', width: 20, height: 20 },
       position: { x: 50, y: 50 }
@@ -311,7 +367,10 @@ class Card extends React.Component {
   }
 
   handleRemove = () => {
-    this.cy.$(':selected').remove();
+    // const eles = this.cy.$(':selected');
+    // eles.remove()
+
+    this.ur.do("remove", this.cy.$(':selected'))
   }
 
   handleSwitchConnectMode = () => {
@@ -347,7 +406,7 @@ class Card extends React.Component {
           <Button type="primary" icon={<UploadOutlined />} onClick={this.handleRestore}> Restore </Button>
           <Button type="primary" icon={<SaveOutlined />} onClick={this.handleSave}> Save </Button>
           <Button type="primary" onClick={this.handleSwitchConnectMode}> Turn {this.state.isEnableEh ? 'OFF' : 'ON'} Connect Mode</Button>
-          
+
           <Button onClick={this.handleLoadDemoFactory}> Load Demo Data </Button>
         </div>
 
