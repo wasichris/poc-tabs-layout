@@ -1,11 +1,11 @@
 import React from 'react';
-import { Button, DatePicker, Layout, Switch, Space, message } from 'antd';
+import { Button, DatePicker, Layout, Switch, Space, message, Modal, Select } from 'antd';
 import { PlusCircleOutlined, SaveOutlined, UploadOutlined, MinusCircleOutlined, SearchOutlined } from '@ant-design/icons';
 import cytoscape from 'cytoscape';
 import cytoscapeOptions from './cytoscapeOptions'
 import edgehandles from 'cytoscape-edgehandles';
 
-
+const { Option } = Select;
 
 class Card extends React.Component {
 
@@ -18,9 +18,13 @@ class Card extends React.Component {
 
     this.state = {
       isEnableEh: false,
-      selectedNodeId: ''
+      selectedNodeId: '',
+      isFindMeVisible: false,
+      machines: []
     }
   }
+
+
 
   componentDidMount() {
 
@@ -28,7 +32,7 @@ class Card extends React.Component {
     // ==================================
     // using cytoscape related plugins
     try {
-      
+
       cytoscape.use(edgehandles);
       var undoRedo = require('cytoscape-undo-redo');
       undoRedo(cytoscape);
@@ -138,7 +142,7 @@ class Card extends React.Component {
       var node = evt.target;
       console.log('click ' + node.id());
       const nodeData = node.json()
-      self.setState({ ...this.state, selectedNodeId: nodeData.data.id })
+      self.setState({ selectedNodeId: nodeData.data.id })
     });
 
     // default not let connect mode on
@@ -238,22 +242,14 @@ class Card extends React.Component {
     // 避免node連線模式下，連線indicator殘留也存下，因此在儲存前先清除 indicator
     this.eh.hide()
 
+
     // 儲存目前的畫面資料
     const cyjsonStr = JSON.stringify(this.cy.json())
     window.localStorage.setItem("elements", cyjsonStr);
     message.success('This layout has been Saved.');
   }
 
-  handleFindMe = () => {
 
-    const eleId = this.state.selectedNodeId
-    if (eleId) {
-      // this.cy.$(eleId).toggleClass('highlight');
-      this.cy.animate({ center: { eles: `#${eleId}` } })
-      this.highlight(eleId)
-    }
-
-  }
 
   handleRestore = () => {
     this.cy.elements().remove();
@@ -283,7 +279,7 @@ class Card extends React.Component {
       this.eh.enable();
     }
 
-    this.setState(state => ({ ...state, isEnableEh: !isEnableEh }))
+    this.setState({ isEnableEh: !isEnableEh })
 
   }
 
@@ -316,7 +312,49 @@ class Card extends React.Component {
       })
   }
 
+  handleFindMe = () => {
+
+    const source = this.cy.json()
+    if (source) {
+      const { elements: { nodes: nodes } } = source
+      if (nodes && nodes.length > 0) {
+        const machines = nodes.filter(node => node.data.type === "rectangle").map(n => n.data)
+        this.setState({ machines: machines })
+        this.showFindMeModal()
+      }
+    }
+  }
+
+  showFindMeModal = () => {
+    this.setState({ isFindMeVisible: true, });
+  }
+
+  handleFindMeModalOk = e => {
+    console.log(e);
+    this.setState({ isFindMeVisible: false, });
+
+    const eleId = this.state.selectedNodeId
+    if (eleId) {
+      // this.cy.$(eleId).toggleClass('highlight');
+      this.cy.animate({ center: { eles: `#${eleId}` } })
+      this.highlight(eleId)
+    }
+
+  };
+
+  handleFindMeModalCancel = e => {
+    console.log(e);
+    this.setState({ isFindMeVisible: false, });
+
+  };
+
+  handleFindMachineChange = (value) => {
+    this.setState({ selectedNodeId: value })
+  }
+
   render() {
+
+    const { isEnableEh, selectedNodeId, isFindMeVisible, machines } = this.state
 
     return (
       <>
@@ -328,7 +366,7 @@ class Card extends React.Component {
           <Button type="primary" icon={<UploadOutlined />} onClick={this.handleRestore}> Restore </Button>
           <Button type="primary" icon={<SaveOutlined />} onClick={this.handleSave}> Save </Button>
           <Button type="primary" icon={<SearchOutlined />} onClick={this.handleFindMe}> Find Me </Button>
-          <Button type="primary" onClick={this.handleSwitchConnectMode}> Turn {this.state.isEnableEh ? 'OFF' : 'ON'} Connect Mode</Button>
+          <Button type="primary" onClick={this.handleSwitchConnectMode}> Turn {isEnableEh ? 'OFF' : 'ON'} Connect Mode</Button>
 
           <Button onClick={this.handleLoadDemoFactory}> Load Demo Data </Button>
         </div>
@@ -336,7 +374,31 @@ class Card extends React.Component {
         <div id='cy'>
 
         </div>
-        {this.state.selectedNodeId}
+        {selectedNodeId}
+
+
+        {/* find me modal */}
+        <Modal
+          title="Machines"
+          visible={isFindMeVisible}
+          onOk={this.handleFindMeModalOk}
+          onCancel={this.handleFindMeModalCancel}
+        >
+          <p>Please choose a machine</p>
+          <Select
+            showSearch
+            style={{ width: '100%' }}
+            placeholder="Select a machine"
+            optionFilterProp="children"
+            onChange={this.handleFindMachineChange}
+            filterOption={(input, option) =>
+              option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+            }
+          >
+            {machines.map(m => <Option key={m.id} value={m.id}>{m.id}</Option>)}
+
+          </Select>
+        </Modal>
       </>
     );
   }
