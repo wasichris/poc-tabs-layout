@@ -374,7 +374,10 @@ class Card extends React.Component {
         <div id='cy'>
 
         </div>
-        {selectedNodeId}
+
+        <div className="factory_machine_info">
+          {selectedNodeId ? 'ID: '+selectedNodeId : ''}
+        </div>
 
 
         {/* find me modal */}

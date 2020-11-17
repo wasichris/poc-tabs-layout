@@ -166,7 +166,7 @@ function App() {
               {panes.map(pane => (
                 <TabPane tab={pane.title} key={pane.key}>
 
-                  <div style={{ padding: '0 10px 10px 10px' }}>
+                  <div style={{ padding: '0 10px 10px 10px', position: 'relative' }}>
 
                     {pane.content(addTab)}
 

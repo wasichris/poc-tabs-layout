@@ -105,3 +105,10 @@
 .factory_tool > * {
   margin: 0 10px 10px 0;
 }
+
+.factory_machine_info {
+  position: absolute;
+    right: 20px;
+    bottom: 15px;
+    font-size: smaller;
+}
