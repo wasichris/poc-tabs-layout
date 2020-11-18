@@ -71,9 +71,24 @@ function App() {
 
   // };
 
+  function getUrlParameter(name) {
+    name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+    var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+    var results = regex.exec(window.location.search);
+    return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+  };
+
   React.useEffect(() => {
-    addTab('Welcome', (addTab) => <Welcome addTab={addTab} />)
-    // addTab('Factory', (addTab) => <Factory addTab={addTab} />)
+    const defaultTab = getUrlParameter('tab')
+    switch (defaultTab) {
+      case 'factory':
+        addTab('Factory', (addTab) => <Factory addTab={addTab} />)
+        break
+
+      default:
+        addTab('Welcome', (addTab) => <Welcome addTab={addTab} />)
+        break
+    }
   }, [])
 
 
@@ -113,7 +128,7 @@ function App() {
     <div className="App">
       <Layout style={{ minHeight: '100vh' }}>
         <Sider trigger={null} collapsible collapsed={collapsed}>
-          
+
           <div className="logo" >
             {/* <img src={logo} className="App-logo" alt="logo" /> */}
           </div>
@@ -122,7 +137,7 @@ function App() {
             <Menu.Item key="1" icon={<HomeOutlined />} onClick={() => addTab('Welcome', (addTab) => <Welcome addTab={addTab} />)}>
               Home
             </Menu.Item>
-            
+
             <Menu.Item key="2" icon={<TableOutlined />} onClick={() => addTab('Report', () => <Report />)}>
               Report
             </Menu.Item>
