@@ -12,6 +12,7 @@ import {
   AreaChartOutlined,
   StarOutlined,
   EyeOutlined,
+  SettingOutlined
 } from '@ant-design/icons';
 import Report from './components/Report/index.js'
 import Welcome from './components/Welcome/index.js'
@@ -22,6 +23,7 @@ import Factory from './components/Factory/index.js'
 
 const { TabPane } = Tabs;
 const { Header, Sider, Content } = Layout;
+const { SubMenu } = Menu;
 
 function App() {
 
@@ -153,6 +155,18 @@ function App() {
             <Menu.Item key="6" icon={<StarOutlined />} onClick={() => addTab('Favorite', (addTab) => <Favorite addTab={addTab} />)}>
               Favorite
             </Menu.Item>
+
+            <SubMenu key="sub2" icon={<SettingOutlined />} title="Settings">
+              <Menu.Item key="5">Project01</Menu.Item>
+              <Menu.Item key="6">Project02</Menu.Item>
+          
+              <SubMenu key="sub3" title="Project03">
+                <Menu.Item key="7">Page01</Menu.Item>
+                <Menu.Item key="8">Page02</Menu.Item>
+                <Menu.Item key="9">Page03</Menu.Item>
+                <Menu.Item key="10">Page04</Menu.Item>
+              </SubMenu>
+            </SubMenu>
           </Menu>
         </Sider>
         <Layout className="site-layout">
