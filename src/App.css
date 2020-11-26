@@ -112,3 +112,10 @@
     bottom: 15px;
     font-size: smaller;
 }
+
+
+/*定義role-user清單大小*/
+.role-user-list > .ant-transfer-list {
+  height: 400px;
+  width: 100%;
+}

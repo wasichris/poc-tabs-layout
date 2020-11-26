@@ -20,6 +20,7 @@ import Chart from './components/Chart/index.js'
 import Register from './components/Register/index.js'
 import Favorite from './components/Favorite/index.js'
 import Factory from './components/Factory/index.js'
+import MaintainRole from './components/Settings/MaintainRole/index.js'
 
 const { TabPane } = Tabs;
 const { Header, Sider, Content } = Layout;
@@ -86,7 +87,9 @@ function App() {
       case 'factory':
         addTab('Factory', (addTab) => <Factory addTab={addTab} />)
         break
-
+      case 'role':
+        addTab('Maintain Role', (addTab) => <MaintainRole addTab={addTab} />)
+        break
       default:
         addTab('Welcome', (addTab) => <Welcome addTab={addTab} />)
         break
@@ -157,9 +160,9 @@ function App() {
             </Menu.Item>
 
             <SubMenu key="sub2" icon={<SettingOutlined />} title="Settings">
-              <Menu.Item key="5">Project01</Menu.Item>
+              <Menu.Item key="5" onClick={() => addTab('Maintain Role', () => <MaintainRole />)}>Role</Menu.Item>
               <Menu.Item key="6">Project02</Menu.Item>
-          
+
               <SubMenu key="sub3" title="Project03">
                 <Menu.Item key="7">Page01</Menu.Item>
                 <Menu.Item key="8">Page02</Menu.Item>
