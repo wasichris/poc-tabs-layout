@@ -2,7 +2,7 @@ import logo from './logo.svg';
 import React from 'react';
 import './App.css';
 import 'antd/dist/antd.css'; // or 'antd/dist/antd.less'
-import { Button, DatePicker, Layout, Menu, Tabs } from 'antd';
+import { Button, DatePicker, Layout, Menu, Tabs, message } from 'antd';
 import {
   HomeOutlined,
   TableOutlined,
@@ -12,7 +12,9 @@ import {
   AreaChartOutlined,
   StarOutlined,
   EyeOutlined,
-  SettingOutlined
+  SettingOutlined,
+  FullscreenOutlined,
+  FullscreenExitOutlined
 } from '@ant-design/icons';
 import Report from './components/Report/index.js'
 import Welcome from './components/Welcome/index.js'
@@ -128,11 +130,42 @@ function App() {
     setActiveKey(newactiveKey)
   };
 
+  //============== fullscreen ==============================================================
+
+  const [isFullScreen, setIsFullScreen] = React.useState(false)
+
+  const escape = (event) => {
+    if (event.key === "Escape") {
+      setIsFullScreen(false)
+    }
+  };
+
+  React.useEffect(() => {
+    document.addEventListener('keydown', escape)
+    return () => document.removeEventListener('keydown', escape)
+  }, [])
+
+  const toggleFullScreen = () => {
+    
+    setIsFullScreen(isFullScreen => {
+      if (!isFullScreen) {
+        message.info('已進入全螢幕模式，按下 Esc 可離開此模式。', 1)
+      }
+      return  !isFullScreen
+    })
+  }
+
+  const operations = isFullScreen ? <FullscreenExitOutlined style={{ marginRight: '10px' }} onClick={toggleFullScreen} />
+    : <FullscreenOutlined style={{ marginRight: '10px' }} onClick={toggleFullScreen} />
+
+
 
   return (
     <div className="App">
       <Layout style={{ minHeight: '100vh' }}>
-        <Sider trigger={null} collapsible collapsed={collapsed}>
+
+
+        {!isFullScreen && <Sider trigger={null} collapsible collapsed={collapsed}>
 
           <div className="logo" >
             {/* <img src={logo} className="App-logo" alt="logo" /> */}
@@ -170,15 +203,23 @@ function App() {
                 <Menu.Item key="10">Page04</Menu.Item>
               </SubMenu>
             </SubMenu>
+  
           </Menu>
+
+
         </Sider>
+        }
+
         <Layout className="site-layout">
-          <Header className="site-layout-background" style={{ padding: 0 }}>
+
+          {!isFullScreen && <Header className="site-layout-background" style={{ padding: 0 }}>
             {React.createElement(collapsed ? MenuUnfoldOutlined : MenuFoldOutlined, {
               className: 'trigger',
               onClick: toggle,
             })}
+
           </Header>
+          }
 
           <Content
             className="site-layout-background"
@@ -194,7 +235,9 @@ function App() {
               activeKey={activeKey}
               type="editable-card"
               onEdit={onEdit}
+              tabBarExtraContent={operations}
             >
+
               {panes.map(pane => (
                 <TabPane tab={pane.title} key={pane.key}>
 
