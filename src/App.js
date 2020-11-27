@@ -146,26 +146,33 @@ function App() {
   }, [])
 
   const toggleFullScreen = () => {
-    
+
     setIsFullScreen(isFullScreen => {
       if (!isFullScreen) {
         message.info('已進入全螢幕模式，按下 Esc 可離開此模式。', 1)
       }
-      return  !isFullScreen
+      return !isFullScreen
     })
   }
 
-  const operations = isFullScreen ? <FullscreenExitOutlined style={{ marginRight: '10px' }} onClick={toggleFullScreen} />
-    : <FullscreenOutlined style={{ marginRight: '10px' }} onClick={toggleFullScreen} />
+  // 不好的寫法(*)
+  // const operations = isFullScreen ? <FullscreenExitOutlined style={{ marginRight: '10px' }} onClick={toggleFullScreen} />
+  //   : <FullscreenOutlined style={{ marginRight: '10px' }} onClick={toggleFullScreen} />
 
-
+  // 較好的寫法(*)
+  const operations = React.createElement(isFullScreen ? FullscreenExitOutlined : FullscreenOutlined, {
+    style: { marginRight: '10px' },
+    onClick: toggleFullScreen,
+  })
 
   return (
     <div className="App">
       <Layout style={{ minHeight: '100vh' }}>
 
 
-        {!isFullScreen && <Sider trigger={null} collapsible collapsed={collapsed}>
+        <Sider trigger={null} collapsible collapsed={collapsed}
+          className={(isFullScreen ? 'ant-layout-sider--hide' : '')}
+        >
 
           <div className="logo" >
             {/* <img src={logo} className="App-logo" alt="logo" /> */}
@@ -203,23 +210,24 @@ function App() {
                 <Menu.Item key="10">Page04</Menu.Item>
               </SubMenu>
             </SubMenu>
-  
+
           </Menu>
 
 
         </Sider>
-        }
 
         <Layout className="site-layout">
 
-          {!isFullScreen && <Header className="site-layout-background" style={{ padding: 0 }}>
+          <Header style={{ padding: 0 }}
+            className={"site-layout-background " + (isFullScreen ? 'ant-layout-header--hide' : '')}
+          >
+
             {React.createElement(collapsed ? MenuUnfoldOutlined : MenuFoldOutlined, {
               className: 'trigger',
               onClick: toggle,
             })}
 
           </Header>
-          }
 
           <Content
             className="site-layout-background"

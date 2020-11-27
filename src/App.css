@@ -119,3 +119,29 @@
   height: 400px;
   width: 100%;
 }
+
+
+/*FullScreen 壓縮 header 的動畫效果*/
+.ant-layout-header.ant-layout-header--hide {
+  height: 0px;
+  overflow: hidden;
+}
+
+.ant-layout-header {
+  transition: all 0.3s ease;
+}
+
+/*FullScreen 壓縮 sidebar 的動畫效果*/
+.ant-layout-sider.ant-layout-sider--hide {
+  width: 0px!important;
+  overflow: hidden!important;
+  flex: 0 0 0!important;
+  min-width: 0!important;
+  max-width: 0!important;
+}
+
+.ant-layout-sider.ant-layout-sider--hide .ant-menu {
+  width: 0;
+  height: 0;
+}
+
