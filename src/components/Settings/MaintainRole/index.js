@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Tree, Card, Col, Input, Form, Row, Typography, Select, Button, message, Transfer, Modal } from 'antd';
 
 
-import { FolderOutlined, ProfileOutlined, PlusCircleOutlined } from '@ant-design/icons';
+import { FolderOutlined, ProfileOutlined, PlusCircleOutlined, DeleteOutlined } from '@ant-design/icons';
 
 const { Title, Paragraph, Link } = Typography;
 const { Option } = Select;
@@ -234,6 +234,22 @@ const MaintainRole = () => {
     setIsCreateRoleModalVisible(true)
   };
 
+  const showDeleteRoleModal = () => {
+    Modal.confirm({
+      title: '刪除角色',
+      content: '是否要刪除此角色?',
+      okText: '刪除', 
+      cancel: '取消',
+      onOk: () => {
+        return new Promise((resolve, reject) => {
+          setRole(null)
+          message.success('Role deleted!')
+          resolve()
+        }).catch(() => console.log('Oops errors!'));
+      }
+    })
+  };
+
   const handleCreateRoleModalOk = e => {
     console.log(e);
     setIsCreateRoleModalVisible(false)
@@ -271,11 +287,13 @@ const MaintainRole = () => {
 
 
       <Select
+        // allowClear
         showSearch
         style={{ width: 400 }}
         placeholder="請選擇需要維護的角色"
         optionFilterProp="children"
         onChange={setRole}
+        value={role}
         // onFocus={onFocus}
         // onBlur={onBlur}
         // onSearch={onSearch}
@@ -288,6 +306,7 @@ const MaintainRole = () => {
         <Option value="sales">Sales - 業務部業務</Option>
       </Select>
 
+      <Button icon={<DeleteOutlined />} disabled={!role} onClick={showDeleteRoleModal}>刪除角色</Button>
       <Button icon={<PlusCircleOutlined />} onClick={showCreateRoleModal}>新增角色</Button>
       <br />
       <br />
