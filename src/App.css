@@ -145,3 +145,13 @@
   height: 0;
 }
 
+/*覆寫 ant-tree disable 文字顏色(調深)*/
+.menu__tree.ant-tree .ant-tree-treenode-disabled .ant-tree-node-content-wrapper {
+  color: #6d6d6d;
+}
+
+
+/*Card title 字型加粗*/
+.ant-card-head-title {
+  font-weight: 600;
+}
