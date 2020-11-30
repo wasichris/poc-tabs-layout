@@ -255,6 +255,37 @@ const MaintainUser = () => {
       <br />
 
       {user && <Row gutter={16}>
+
+        <Col span={12}>
+          <Card title="權限" bordered={true} >
+
+            <Tree
+              className='menu__tree'
+              showLine={showLine}
+              showIcon={showIcon}
+
+              // defaultExpandedKeys={['0-0']}
+              defaultExpandedKeys={checkedKeys}
+              // autoExpandParent={true}
+              // blockNode={true}
+
+              onSelect={onSelect}
+              treeData={menu}
+
+              draggable
+              onDragEnter={onDragEnter}
+              onDrop={onDrop}
+
+              checkable
+              checkedKeys={checkedKeys}
+              onCheck={onCheck}
+
+              disabled
+            />
+
+          </Card>
+        </Col>
+
         <Col span={12}>
 
           <Card className="app-card" title="角色" bordered={true} extra={<a href="#" onClick={() => message.success('Role saved!')}>Save</a>} >
@@ -293,36 +324,7 @@ const MaintainUser = () => {
 
           </Card>
         </Col>
-        <Col span={12}>
-          <Card title="權限(唯讀)" bordered={true} >
-
-
-            <Tree
-              className='menu__tree'
-              showLine={showLine}
-              showIcon={showIcon}
-
-              // defaultExpandedKeys={['0-0']}
-              defaultExpandedKeys={checkedKeys}
-              // autoExpandParent={true}
-              // blockNode={true}
-
-              onSelect={onSelect}
-              treeData={menu}
-
-              draggable
-              onDragEnter={onDragEnter}
-              onDrop={onDrop}
-
-              checkable
-              checkedKeys={checkedKeys}
-              onCheck={onCheck}
-
-              disabled
-            />
-
-          </Card>
-        </Col>
+      
 
       </Row>
       }
