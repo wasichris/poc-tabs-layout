@@ -238,7 +238,7 @@ const MaintainRole = () => {
     Modal.confirm({
       title: '刪除角色',
       content: '是否要刪除此角色?',
-      okText: '刪除', 
+      okText: '刪除',
       cancel: '取消',
       onOk: () => {
         return new Promise((resolve, reject) => {
@@ -271,6 +271,28 @@ const MaintainRole = () => {
   };
 
 
+  // =======================================
+
+  const [updateForm] = Form.useForm();
+
+  const roles = [
+    { key: 'admin', name: 'Manager', description: '各處一級主管' },
+    { key: 'tech', name: 'Tech', description: '各處技術人員' },
+    { key: 'sales', name: 'Sales', description: '業務部業務' },
+  ]
+
+  React.useEffect(() => {
+    const roleObj = roles.find(r => r.key === role)
+    if (roleObj) {
+      updateForm.setFieldsValue({
+        rolename: roleObj.name,
+        roledesc: roleObj.description
+      });
+    }
+   
+  }, [role]);
+
+
   return (
     <div>
       <Title level={2}> 角色維護 </Title>
@@ -301,9 +323,8 @@ const MaintainRole = () => {
           option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
         }
       >
-        <Option value="manager">Manager - 各處一級主管</Option>
-        <Option value="tech">Tech - 各處技術人員</Option>
-        <Option value="sales">Sales - 業務部業務</Option>
+        {roles.map(r =>  <Option key={r.key} value={r.key}> {`${r.name} - ${r.description}`}</Option>)}
+      
       </Select>
 
       <Button icon={<DeleteOutlined />} disabled={!role} onClick={showDeleteRoleModal}>刪除角色</Button>
@@ -311,75 +332,100 @@ const MaintainRole = () => {
       <br />
       <br />
 
-      {role && <Row gutter={16}>
-        <Col span={12}>
+      {role && <>
 
-          <Card title="人員" bordered={true} extra={<a href="#" onClick={() => message.success('User saved!')}>Save</a>} >
+        <Row gutter={[16, 16]}>
+          <Col span={24}>
 
-            新增角色人員
-            <Select
-              // labelInValue
-              mode="multiple"
-              style={{ width: '100%' }}
-              placeholder="Please select"
-              // defaultValue={['a10', 'c12']}
-              onChange={handleSelectUserChange}
-              options={options}
-            />
-            <br />
-            <br />
+            <Card title="角色" bordered={true} extra={<a href="#" onClick={() => message.success('Role saved!')}>Save</a>} >
+              <Form layout='inline'  name="update" form={updateForm}  >
 
-            移除角色人員
-            <Transfer
-              className="role-user-list"
-              dataSource={mockData}
-              titles={['角色人員', '移除人員']}
-              targetKeys={targetKeys}
-              selectedKeys={selectedKeys}
-              onChange={handleTransferChange}
-              onSelectChange={handleTransferSelectChange}
-              // onScroll={handleScroll}
-              render={item => item.title}
-              // disabled={disabled}
-              oneWay
-              showSelectAll={false}
-              showSearch
-            // style={{ height: '400px' }}
-            />
+                <Form.Item label="角色名稱" name="rolename" rules={[{ required: true, message: '請輸入角色名稱!', },]}>
+                  <Input value={role} />
+                </Form.Item>
+
+                <Form.Item label="角色描述" name="roledesc">
+                  <Input style={{width: '300px'}}/>
+                </Form.Item>
+
+              </Form>
+
+            </Card>
+          </Col>
+        </Row>
 
 
-          </Card>
-        </Col>
-        <Col span={12}>
-          <Card title="權限" bordered={true} extra={<a href="#" onClick={() => message.success('Permission saved!')}>Save</a>}>
+        <Row gutter={[16, 16]}>
+
+          <Col span={12}>
+
+            <Card title="人員" bordered={true} extra={<a href="#" onClick={() => message.success('User saved!')}>Save</a>} >
+
+              新增角色人員
+              <Select
+                // labelInValue
+                mode="multiple"
+                style={{ width: '100%' }}
+                placeholder="Please select"
+                // defaultValue={['a10', 'c12']}
+                onChange={handleSelectUserChange}
+                options={options}
+              />
+              <br />
+              <br />
+
+              移除角色人員
+              <Transfer
+                className="role-user-list"
+                dataSource={mockData}
+                titles={['角色人員', '移除人員']}
+                targetKeys={targetKeys}
+                selectedKeys={selectedKeys}
+                onChange={handleTransferChange}
+                onSelectChange={handleTransferSelectChange}
+                // onScroll={handleScroll}
+                render={item => item.title}
+                // disabled={disabled}
+                oneWay
+                showSelectAll={false}
+                showSearch
+              // style={{ height: '400px' }}
+              />
 
 
-            <Tree
-              showLine={showLine}
-              showIcon={showIcon}
+            </Card>
+          </Col>
+          <Col span={12}>
+            <Card title="權限" bordered={true} extra={<a href="#" onClick={() => message.success('Permission saved!')}>Save</a>}>
 
-              // defaultExpandedKeys={['0-0']}
-              defaultExpandedKeys={checkedKeys}
-              // autoExpandParent={true}
-              // blockNode={true}
 
-              onSelect={onSelect}
-              treeData={menu}
+              <Tree
+                showLine={showLine}
+                showIcon={showIcon}
 
-              draggable
-              onDragEnter={onDragEnter}
-              onDrop={onDrop}
+                // defaultExpandedKeys={['0-0']}
+                defaultExpandedKeys={checkedKeys}
+                // autoExpandParent={true}
+                // blockNode={true}
 
-              checkable
-              checkedKeys={checkedKeys}
-              onCheck={onCheck}
+                onSelect={onSelect}
+                treeData={menu}
 
-            />
+                draggable
+                onDragEnter={onDragEnter}
+                onDrop={onDrop}
 
-          </Card>
-        </Col>
+                checkable
+                checkedKeys={checkedKeys}
+                onCheck={onCheck}
 
-      </Row>
+              />
+
+            </Card>
+          </Col>
+
+        </Row>
+      </>
       }
 
 
@@ -392,9 +438,9 @@ const MaintainRole = () => {
         cancelText="取消"
       >
 
-        <Form {...layout}  name="basic"  >
+        <Form {...layout} name="basic"  >
 
-          <Form.Item label="角色名稱" name="rolename" rules={[ { required: true,  message: '請輸入角色名稱!', },  ]}>
+          <Form.Item label="角色名稱" name="rolename" rules={[{ required: true, message: '請輸入角色名稱!', },]}>
             <Input />
           </Form.Item>
 

@@ -24,6 +24,7 @@ import Favorite from './components/Favorite/index.js'
 import Factory from './components/Factory/index.js'
 import MaintainRole from './components/Settings/MaintainRole/index.js'
 import MaintainUser from './components/Settings/MaintainUser/index.js'
+import MaintainMenu from './components/Settings/MaintainMenu/index.js'
 
 const { TabPane } = Tabs;
 const { Header, Sider, Content } = Layout;
@@ -95,6 +96,9 @@ function App() {
         break
       case 'user':
         addTab('Maintain User', (addTab) => <MaintainUser addTab={addTab} />)
+        break
+      case 'menu':
+        addTab('Maintain Menu', (addTab) => <MaintainMenu addTab={addTab} />)
         break
       default:
         addTab('Welcome', (addTab) => <Welcome addTab={addTab} />)
@@ -206,6 +210,7 @@ function App() {
             <SubMenu key="sub2" icon={<SettingOutlined />} title="Settings">
               <Menu.Item key="5" onClick={() => addTab('Maintain Role', () => <MaintainRole />)}>Role</Menu.Item>
               <Menu.Item key="51" onClick={() => addTab('Maintain User', () => <MaintainUser />)}>User</Menu.Item>
+              <Menu.Item key="52" onClick={() => addTab('Maintain Menu', () => <MaintainMenu />)}>Menu</Menu.Item>
               <SubMenu key="sub3" title="Project03">
                 <Menu.Item key="7">Page01</Menu.Item>
                 <Menu.Item key="8">Page02</Menu.Item>
