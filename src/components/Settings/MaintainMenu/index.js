@@ -415,6 +415,10 @@ const MaintainMenu = () => {
             </Radio.Group>
           </Form.Item>
 
+          {newMenuType === 2 && <Form.Item label="頁面組件" name="menuComponent" rules={[{ required: true, message: '請輸入頁面組件名稱!', },]}>
+            <Input />
+          </Form.Item>}
+
           <Form.Item label="選單位置" name="menuLocation" rules={[{ required: true, message: '請輸入選單位置!', },]}>
             <TreeSelect
               showSearch
