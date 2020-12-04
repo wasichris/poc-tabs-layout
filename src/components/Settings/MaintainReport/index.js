@@ -14,29 +14,7 @@ const MaintainReport = () => {
   const [report, setReport] = useState('')
 
 
-  //==================================================================================
-  const [selectedKeys, setSelectedKeys] = useState([])
-  const [targetKeys, setTargetKeys] = useState([]);
-  const [columns, setColumns] = useState([])
-
-  const handleTransferChange = (nextTargetKeys, direction, moveKeys) => {
-    setTargetKeys(nextTargetKeys);
-
-    console.log('targetKeys: ', nextTargetKeys);
-    console.log('direction: ', direction);
-    console.log('moveKeys: ', moveKeys);
-  };
-
-  const handleTransferSelectChange = (sourceSelectedKeys, targetSelectedKeys) => {
-    setSelectedKeys([...sourceSelectedKeys, ...targetSelectedKeys]);
-
-    console.log('sourceSelectedKeys: ', sourceSelectedKeys);
-    console.log('targetSelectedKeys: ', targetSelectedKeys);
-  };
-
-
-
-  //==============================
+  // ======= 取得資料 ==============================
   const dataSource = {
     cards: [
       { id: '10', name: 'card-a', description: 'dep1' },
@@ -51,19 +29,123 @@ const MaintainReport = () => {
     }
   }
 
-  const handleExportFile = () => {
+  const [responseData, setResponseData] = useState({})
+  React.useEffect(() => {
+    setResponseData(dataSource)
+  }, [])
 
-    const entozh = {
-      "name": "姓名",
-      "dept": "部門",
-      "age": "年齡",
+
+  //======= 依據 array path 取出指定的陣列資料，並取出所有屬性(欄位)名稱 ======================
+  const [arrayPath, setArrayPath] = React.useState('queryResult.users')
+  const [arrayData, setArrayData] = React.useState([])
+
+  const handleArrayPathSearch = (arrayPath) => {
+
+    setTableColumns([])
+    setTableDataSource([])
+    setTransferColumns([])
+    setTransferedColumnKeys([]);
+
+    const arrayData = get(responseData, arrayPath)
+    if (arrayData && Array.isArray(arrayData) && arrayData.length > 0) {
+
+      // 指定的陣列資料
+      setArrayData(arrayData)
+
+      // 取出第一筆陣列資料的所有屬性(欄位)名稱
+      const keys = Object.keys(arrayData[0])
+      setTransferColumns(
+        keys.map(k => ({
+          key: k,
+          title: k,
+          description: `description of ` + k,
+          disabled: false
+        }))
+      )
+
     }
 
-    const json = dataSource.map((item) => {
+  }
+
+  //======== 取得需要顯示的欄位 Key 值 ==============================================
+  const [transferColumns, setTransferColumns] = useState([]) 
+  const [transferedColumnKeys, setTransferedColumnKeys] = useState([]);
+
+  const handleTransferChange = (nextVisibleColumnKeys, direction, moveKeys) => {
+    setTransferedColumnKeys(nextVisibleColumnKeys);
+  };
+
+
+
+  //======== 取出指定 arrayPath 下的 arrayData 需要顯示的欄位資料 =====================
+  const [tableColumns, setTableColumns] = React.useState([])
+  const [tableDataSource, setTableDataSource] = React.useState([])
+
+  React.useEffect(() => {
+
+    if (transferedColumnKeys && transferedColumnKeys.length > 0) {
+
+      // 顯示什麼欄位
+      const tableColumns = transferedColumnKeys.map(k => ({
+        title: k,
+        dataIndex: k,
+        key: k
+      }))
+      setTableColumns(tableColumns)
+
+      // 透過 arrayPath 取得目標 arrayData 後加上 key 在給 table 顯示
+      // TODO: 應該使要相依 arrayPath, transferedColumnKeys, responseData 就好了!!!! 要處理!!!
+      // TODO: 示意只顯示前N筆資料
+      // setTableDataSource(arrayData.map((a, index) => ({ key: index, ...a })))
+      const arrayData = get(responseData, arrayPath)
+      if (arrayData && Array.isArray(arrayData) && arrayData.length > 0) {
+        setTableDataSource(arrayData.map((a, index) => ({ key: index, ...a })))
+      }
+    
+
+    } else {
+      setTableColumns([])
+      setTableDataSource([])
+    }
+
+  }, [transferedColumnKeys, arrayPath, responseData])
+
+
+  //==============================
+
+
+
+  const handleExportFile = () => {
+
+
+  
+    const entozh = transferedColumnKeys.reduce((newData, key) => {
+      newData[key] = key
+      return newData
+    }, {})
+
+    // const entozh = {
+    //   "useId": "用戶帳號",
+    //   "name": "姓名",
+    //   // "dept": "部門",
+    //   // "age": "年齡",
+    // }
+
+    const json = arrayData.map((item) => {
       return Object.keys(item).reduce((newData, key) => {
-        const newKey = entozh[key] || key
-        newData[newKey] = item[key]
+
+        const hasKey = entozh.hasOwnProperty(key)
+        if (hasKey) {
+          // 只取出 entozh 有定義的欄位
+          const columnTitleName = entozh[key] || key
+          newData[columnTitleName] = item[key]
+        }
+    
         return newData
+        
+        // const newKey = entozh[key] || key
+        // newData[newKey] = item[key]
+        // return newData
       }, {})
     });
     console.log(`%c json `, 'background-color: #3A88AE; color: white;font-size: 14px; font-weight: bold;', json)
@@ -112,91 +194,6 @@ const MaintainReport = () => {
   }
 
 
-  //==============================
-  const [tableColumns, setTableColumns] = React.useState([])
-  const [tableDataSource, setTableDataSource] = React.useState([])
-  const [targetArray, setTargetArray] = React.useState([])
-
-  const [arrayPath, setArrayPath] = React.useState('queryResult.users')
-  const handleArrayPathSearch = (arrayPath) => {
-
-    setTableColumns([])
-    setTableDataSource([])
-    setColumns([])
-    setTargetKeys([]);
-    setSelectedKeys([]);
-
-    const arrayData = get(dataSource, arrayPath)
-    if (arrayData && Array.isArray(arrayData) && arrayData.length > 0) {
-      const keys = Object.keys(arrayData[0])
-      const keyColumns = keys.map(k => ({
-        key: k,
-        title: k,
-        description: `description of k`,
-        disabled: false
-      }))
-
-      // 提供資料挑選要顯示那些欄位
-      setColumns(keyColumns)
-
-      // 目標的 array 資料
-      setTargetArray(arrayData)
-
-
-      // ================================================
-
-      // // 要在下面一層，只顯示勾選的欄位，還有對應欄位名稱
-      // const tempTableColumns = keys.map(k => ({
-      //   title: k,
-      //   dataIndex: k,
-      //   key: k
-      // }))
-      // setTableColumns(tempTableColumns)
-      // setTableDataSource(arrayData)
-
-
-    } else {
-      setColumns([])
-    }
-
-    console.log(`%c arrayData `, 'background-color: #3A88AE; color: white;font-size: 14px; font-weight: bold;', arrayData)
-    console.log(`%c arrayPath `, 'background-color: #3A88AE; color: white;font-size: 14px; font-weight: bold;', arrayPath)
-
-  }
-
-
-  // const refreshTable = (keys, arrayData) => {
-  //   const tempTableColumns = keys.map(k => ({
-  //     title: k,
-  //     dataIndex: k,
-  //     key: k
-  //   }))
-  //   setTableColumns(tempTableColumns)
-  //   setTableDataSource(arrayData)
-  // }
-
-  React.useEffect(() => {
-
-    if (targetKeys && targetKeys.length > 0) {
-
-      // 顯示什麼欄位
-      const tempTableColumns = targetKeys.map(k => ({
-        title: k,
-        dataIndex: k,
-        key: k
-      }))
-      setTableColumns(tempTableColumns)
-
-      // 透過 arrayPath 取得目標 array 加上 key 在給 table 顯示
-      // TODO: 應該使要相依 arrayPath, targetKeys, dataSource 就好了!!!! 要處理!!!
-      // TODO: 示意只顯示前N筆資料
-      setTableDataSource(targetArray.map((a, index) => ({ key: index, ...a })))
-    } else {
-      setTableColumns([])
-      setTableDataSource([])
-    }
-
-  }, [targetKeys, targetArray])
 
   return (
     <div>
@@ -221,7 +218,6 @@ const MaintainReport = () => {
         <Option value="darren">Darren Chen - Dept03</Option>
       </Select>
 
-      <Button icon={<ExportOutlined />} onClick={handleExportFile}>Export Data</Button>
 
 
       <br />
@@ -231,7 +227,7 @@ const MaintainReport = () => {
 
         <Col span={12}>
           <Card title="原始資料" bordered={true} >
-            <ReactJson src={dataSource} enableClipboard={false} displayDataTypes={false} />
+            <ReactJson src={responseData} enableClipboard={false} displayDataTypes={false} />
           </Card>
         </Col>
 
@@ -251,12 +247,10 @@ const MaintainReport = () => {
             資料欄位
             <Transfer
               className="report-column-list"
-              dataSource={columns}
+              dataSource={transferColumns}
               titles={['可選欄位', '報表欄位']}
-              targetKeys={targetKeys}
-              selectedKeys={selectedKeys}
+              targetKeys={transferedColumnKeys}
               onChange={handleTransferChange}
-              onSelectChange={handleTransferSelectChange}
               render={item => item.title}
               // disabled={disabled}
               oneWay
@@ -270,6 +264,10 @@ const MaintainReport = () => {
 
             報表資料
             <Table dataSource={tableDataSource} columns={tableColumns} pagination={false} />
+            <br />
+            <br />
+            {tableDataSource && tableDataSource.length>0 && <Button icon={<ExportOutlined />} onClick={handleExportFile}>Export Data</Button>}
+
 
           </Card>
         </Col>
