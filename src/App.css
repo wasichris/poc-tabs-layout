@@ -120,6 +120,11 @@
   width: 100%;
 }
 
+/*定義report-column清單大小*/
+.report-column-list > .ant-transfer-list {
+  height: 250px;
+  width: 100%;
+}
 
 /*FullScreen 壓縮 header 的動畫效果*/
 .ant-layout-header.ant-layout-header--hide {
