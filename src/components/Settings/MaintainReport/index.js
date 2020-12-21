@@ -11,7 +11,7 @@ const { Search } = Input;
 
 const MaintainReport = () => {
 
-  const [report, setReport] = useState('')
+  const [report, setReport] = useState('r1')
 
 
   // ======= 取得資料 ==============================
@@ -203,19 +203,20 @@ const MaintainReport = () => {
       <Select
         showSearch
         style={{ width: 400 }}
-        placeholder="請選擇需要維護的人員"
+        placeholder="請選擇需要維護的報表"
         optionFilterProp="children"
         onChange={setReport}
         // onFocus={onFocus}
         // onBlur={onBlur}
         // onSearch={onSearch}
+        value={report}
         filterOption={(input, option) =>
           option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
         }
       >
-        <Option value="chris">Chris Chen - Dept01</Option>
-        <Option value="jason">Jason Lin - Dept02</Option>
-        <Option value="darren">Darren Chen - Dept03</Option>
+        <Option value="r1">Report - 01</Option>
+        <Option value="r2">Report - 02</Option>
+        <Option value="r3">Report - 03</Option>
       </Select>
 
 
@@ -265,8 +266,7 @@ const MaintainReport = () => {
             報表資料
             <Table dataSource={tableDataSource} columns={tableColumns} pagination={false} />
             <br />
-            <br />
-            {tableDataSource && tableDataSource.length>0 && <Button icon={<ExportOutlined />} onClick={handleExportFile}>Export Data</Button>}
+            {tableDataSource && tableDataSource.length>0 && <Button icon={<ExportOutlined />} onClick={handleExportFile}>Excel</Button>}
 
 
           </Card>

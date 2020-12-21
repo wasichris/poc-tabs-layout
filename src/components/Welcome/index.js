@@ -4,6 +4,10 @@ import Spin from '../Spin/index.js'
 import Register from '../Register/index.js'
 import Chart from '../Chart/index.js'
 import Factory from '../Factory/index.js'
+import MaintainUser from '../Settings/MaintainUser/index.js'
+import MaintainRole from '../Settings/MaintainRole/index.js'
+import MaintainMenu from '../Settings/MaintainMenu/index.js'
+import MaintainReport from '../Settings/MaintainReport/index.js'
 
 const { Title, Paragraph, Link } = Typography;
 
@@ -52,9 +56,18 @@ const cards = ({ addTab }) => {
       <Col span={8}>
         <Card title="Application 03" className='ant-card-gb' bordered={true}>
           <Paragraph>
-            <ul>
+          <ul>
               <li>
-                Function01
+                <Link onClick={() => addTab('Edit Role', () => <MaintainRole />)}>Edit Role</Link>
+              </li>
+              <li>
+                <Link onClick={() => addTab('Edit User', () => <MaintainUser />)}>Edit User</Link>
+              </li>
+              <li>
+                <Link onClick={() => addTab('Edit Menu', () => <MaintainMenu />)}>Edit Menu</Link>
+              </li>
+              <li>
+                <Link onClick={() => addTab('Edit Report', () => <MaintainReport />)}>Edit Report</Link>
               </li>
             </ul>
           </Paragraph>
